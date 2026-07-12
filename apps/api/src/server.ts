@@ -8,6 +8,7 @@ import { createLlmClient } from "./llm/index.js";
 import { FileWriteAheadLog, GoogleSheetsLeadWriter, SmtpLeadNotifier, submitLead } from "./leads/index.js";
 import type { Logger } from "./leads/types.js";
 import { registerChatRoutes } from "./routes/chat.js";
+import { registerWidgetRoute } from "./routes/widget.js";
 import { InMemorySessionStore } from "./session/store.js";
 import { CloudflareTurnstileVerifier } from "./security/turnstile.js";
 
@@ -58,6 +59,7 @@ export async function buildServer() {
   const turnstile = new CloudflareTurnstileVerifier(config.turnstile.secretKey);
 
   registerChatRoutes(app, { sessionStore, orchestratorDeps, turnstile });
+  registerWidgetRoute(app, config.widgetDistPath);
 
   return { app, config };
 }

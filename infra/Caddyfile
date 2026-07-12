@@ -1,0 +1,18 @@
+# Replace with the real subdomain once DNS is pointed at the Hostinger VPS
+# (e.g. chat.revasins.com). Caddy provisions and renews the TLS cert for
+# this domain automatically — no manual certbot/Let's Encrypt setup needed.
+chat.revasins.com {
+	encode gzip
+
+	# widget.js, /api/*, and /health are all served by the app itself
+	# (registerWidgetRoute sets its own charset header — see
+	# apps/api/src/routes/widget.ts — so no extra header rewriting is
+	# needed here), Caddy is purely the TLS-terminating reverse proxy.
+	reverse_proxy app:8080
+
+	header {
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "SAMEORIGIN"
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+}

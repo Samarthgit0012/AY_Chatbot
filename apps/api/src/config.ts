@@ -33,6 +33,7 @@ export interface AppConfig {
     readonly secretKey: string;
   };
   readonly walFilePath: string;
+  readonly widgetDistPath: string;
 }
 
 /** Loaded once at process startup — fails fast on missing config rather than at first request. */
@@ -66,5 +67,6 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
       secretKey: required(env, "TURNSTILE_SECRET_KEY"),
     },
     walFilePath: env.WAL_FILE_PATH ?? "/var/log/riva/leads.jsonl",
+    widgetDistPath: env.WIDGET_DIST_PATH ?? "/app/widget-dist/widget.js",
   };
 }
