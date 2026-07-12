@@ -1,3 +1,21 @@
+import { ELIGIBLE_STATES, type EligibleState } from "./types.js";
+
+export const ELIGIBLE_STATE_NAMES: Readonly<Record<EligibleState, string>> = {
+  OR: "Oregon",
+  WA: "Washington",
+  NC: "North Carolina",
+  SC: "South Carolina",
+  OH: "Ohio",
+  TN: "Tennessee",
+  MO: "Missouri",
+  FL: "Florida",
+};
+
+/** Button labels for the state-selection step, in the same order as ELIGIBLE_STATES. */
+export const ELIGIBLE_STATE_BUTTONS: readonly string[] = ELIGIBLE_STATES.map(
+  (code) => ELIGIBLE_STATE_NAMES[code],
+);
+
 export const BUSINESS_INFO = {
   agencyName: "Revas Insurance Agency",
   botName: "Riva",

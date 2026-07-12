@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import { OPENING_MESSAGE } from "@revas/flows";
+import { ELIGIBLE_STATE_BUTTONS, OPENING_MESSAGE } from "@revas/flows";
 import { handleUserMessage, INITIAL_STATE, type OrchestratorDeps } from "../conversation/index.js";
 import type { SessionStore } from "../session/store.js";
 import type { TurnstileVerifier } from "../security/turnstile.js";
@@ -30,7 +30,7 @@ export function registerChatRoutes(app: FastifyInstance, deps: ChatRouteDeps): v
     const sessionId = deps.sessionStore.create();
     return reply.send({
       sessionId,
-      messages: [{ text: OPENING_MESSAGE }],
+      messages: [{ text: OPENING_MESSAGE, buttons: ELIGIBLE_STATE_BUTTONS }],
       state: INITIAL_STATE.phase,
     });
   });

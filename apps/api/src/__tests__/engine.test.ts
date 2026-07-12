@@ -100,6 +100,26 @@ describe("conversation engine — state eligibility gate", () => {
     const result = requireHandled(transition(INITIAL_STATE, text("asdfghjkl")));
     expect(result.state.phase).toBe("awaitingState");
   });
+
+  it("reprompts with the state buttons attached, not just plain text", () => {
+    const result = requireHandled(transition(INITIAL_STATE, text("asdfghjkl")));
+    expect(result.messages[0]?.buttons).toEqual([
+      "Oregon",
+      "Washington",
+      "North Carolina",
+      "South Carolina",
+      "Ohio",
+      "Tennessee",
+      "Missouri",
+      "Florida",
+    ]);
+  });
+
+  it("accepts a state selected via button click, not just typed text", () => {
+    const result = requireHandled(transition(INITIAL_STATE, button("Florida")));
+    expect(result.state.phase).toBe("mainMenu");
+    expect(result.state.userState).toBe("FL");
+  });
 });
 
 describe("conversation engine — claims flow reachability", () => {

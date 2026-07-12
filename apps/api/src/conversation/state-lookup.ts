@@ -1,20 +1,9 @@
-import { ELIGIBLE_STATES, type EligibleState } from "@revas/flows";
-
-const STATE_NAMES: Readonly<Record<EligibleState, string>> = {
-  OR: "Oregon",
-  WA: "Washington",
-  NC: "North Carolina",
-  SC: "South Carolina",
-  OH: "Ohio",
-  TN: "Tennessee",
-  MO: "Missouri",
-  FL: "Florida",
-};
+import { ELIGIBLE_STATES, ELIGIBLE_STATE_NAMES, type EligibleState } from "@revas/flows";
 
 const LOOKUP = new Map<string, EligibleState>();
 for (const code of ELIGIBLE_STATES) {
   LOOKUP.set(code.toLowerCase(), code);
-  LOOKUP.set(STATE_NAMES[code].toLowerCase(), code);
+  LOOKUP.set(ELIGIBLE_STATE_NAMES[code].toLowerCase(), code);
 }
 
 /**
@@ -38,7 +27,7 @@ export function parseEligibleState(text: string): EligibleState | null {
 }
 
 export function stateLabel(code: EligibleState): string {
-  return STATE_NAMES[code];
+  return ELIGIBLE_STATE_NAMES[code];
 }
 
 /** Every US state/territory name and abbreviation, used only to distinguish "a real state we don't serve" from "not a recognizable state at all" so the bot can give the right response in each case. */

@@ -11,6 +11,7 @@ import {
   CLOSING_MESSAGE,
   HUMAN_HANDOFF_INTRO,
   CLAIMS_SAFETY_RESPONSE,
+  ELIGIBLE_STATE_BUTTONS,
   type FlowDefinition,
 } from "@revas/flows";
 import { MAIN_MENU_ROUTES } from "./main-menu.js";
@@ -79,10 +80,10 @@ function startLeadCapture(state: ConversationState): EngineOutcome {
 }
 
 function handleAwaitingState(state: ConversationState, input: UserInput): EngineOutcome {
-  if (input.type !== "text") return unhandled();
-
   if (isGreeting(input.value)) {
-    return handled(state, [{ text: "Hey there! What state are you in? (e.g. Oregon, OR)" }]);
+    return handled(state, [
+      { text: "Hey there! What state are you in?", buttons: ELIGIBLE_STATE_BUTTONS },
+    ]);
   }
 
   const eligible = parseEligibleState(input.value);
@@ -98,7 +99,10 @@ function handleAwaitingState(state: ConversationState, input: UserInput): Engine
   }
 
   return handled(state, [
-    { text: "Sorry, I didn't quite catch that — what state are you in? (e.g. Oregon, OR)" },
+    {
+      text: "Sorry, I didn't quite catch that — what state are you in?",
+      buttons: ELIGIBLE_STATE_BUTTONS,
+    },
   ]);
 }
 
