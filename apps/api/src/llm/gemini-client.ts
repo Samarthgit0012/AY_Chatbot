@@ -20,7 +20,7 @@ export class GeminiClient implements LlmClient {
 
   constructor(config: GeminiClientConfig) {
     this.client = new GoogleGenAI({ apiKey: config.apiKey });
-    this.model = config.model ?? "gemini-2.0-flash";
+    this.model = config.model ?? "gemini-3.1-flash-lite";
   }
 
   async complete(request: CompletionRequest): Promise<string> {

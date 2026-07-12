@@ -11,3 +11,9 @@ Thumbs.db
 .playwright-mcp/
 coverage/
 *.tsbuildinfo
+
+# Service account keys / credential JSON files — never belong in the repo,
+# even gitignored (see infra/.env.example instead).
+*-service-account*.json
+*service-account-key*.json
+aychatbot-*.json
