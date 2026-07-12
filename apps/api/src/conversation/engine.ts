@@ -10,6 +10,7 @@ import {
   UNIVERSAL_LEAD_FIELDS,
   CLOSING_MESSAGE,
   HUMAN_HANDOFF_INTRO,
+  CLAIMS_SAFETY_RESPONSE,
   type FlowDefinition,
 } from "@revas/flows";
 import { MAIN_MENU_ROUTES } from "./main-menu.js";
@@ -112,9 +113,11 @@ function handleMainMenu(state: ConversationState, input: UserInput): EngineOutco
       ]);
     case "line": {
       const flow = FLOWS_BY_LINE[route.line];
-      return handled({ ...state, selectedLine: route.line, phase: "lineEntry" }, [
-        { text: flow.entry.prompt, buttons: flow.entry.buttons },
-      ]);
+      const entryMessages: BotMessage[] =
+        route.line === "claims"
+          ? [{ text: CLAIMS_SAFETY_RESPONSE }, { text: flow.entry.prompt, buttons: flow.entry.buttons }]
+          : [{ text: flow.entry.prompt, buttons: flow.entry.buttons }];
+      return handled({ ...state, selectedLine: route.line, phase: "lineEntry" }, entryMessages);
     }
   }
 }

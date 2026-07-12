@@ -48,6 +48,7 @@ export const MAIN_MENU_ROUTES: Readonly<Record<string, MainMenuRoute>> = {
   "Renters Insurance": { kind: "line", line: "renters" },
   "Landlord Insurance": { kind: "line", line: "landlord" },
   "Umbrella Insurance": { kind: "line", line: "umbrella" },
+  "Report a Claim": { kind: "line", line: "claims" },
   "I have a question": { kind: "question" },
   "Talk to a person": { kind: "humanHandoff" },
   "DOT Compliance Services": { kind: "line", line: "dotCompliance" },

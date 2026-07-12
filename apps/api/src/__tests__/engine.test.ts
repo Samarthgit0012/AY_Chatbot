@@ -102,6 +102,17 @@ describe("conversation engine — state eligibility gate", () => {
   });
 });
 
+describe("conversation engine — claims flow reachability", () => {
+  it("routes 'Report a Claim' to the claims line with the safety message shown first", () => {
+    const afterState = requireHandled(transition(INITIAL_STATE, text("Missouri")));
+    const result = requireHandled(transition(afterState.state, button("Report a Claim")));
+
+    expect(result.state.selectedLine).toBe("claims");
+    expect(result.messages[0]?.text).toContain("call 911 first");
+    expect(result.messages[1]?.buttons).toContain("Auto");
+  });
+});
+
 describe("conversation engine — main menu sub-menus", () => {
   it("expands the combined Contractor Insurance / Bonds button into a sub-menu", () => {
     const afterState = requireHandled(transition(INITIAL_STATE, text("OH")));

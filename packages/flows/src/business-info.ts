@@ -24,6 +24,7 @@ export const MAIN_MENU_BUTTONS = [
   "Personal Auto",
   "Home / Renters / Landlord",
   "Umbrella Insurance",
+  "Report a Claim",
   "I have a question",
   "Talk to a person",
 ] as const;
