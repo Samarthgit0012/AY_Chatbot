@@ -22,7 +22,7 @@ import {
   type UserInput,
 } from "./types.js";
 
-const CALLBACK_FORM_BUTTON = "Fill out callback form";
+export const CALLBACK_FORM_BUTTON = "Fill out callback form";
 
 function handled(state: ConversationState, messages: BotMessage[], leadCompleted?: LeadPayload): EngineOutcome {
   return { kind: "handled", result: { state, messages, leadCompleted } };
