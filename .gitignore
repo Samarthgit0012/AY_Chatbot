@@ -17,3 +17,6 @@ coverage/
 *-service-account*.json
 *service-account-key*.json
 aychatbot-*.json
+
+# Local write-ahead-log test artifacts from manual dev testing.
+tmp-*-leads.jsonl

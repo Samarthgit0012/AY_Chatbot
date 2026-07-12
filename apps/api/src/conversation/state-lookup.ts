@@ -17,8 +17,23 @@ for (const code of ELIGIBLE_STATES) {
   LOOKUP.set(STATE_NAMES[code].toLowerCase(), code);
 }
 
+/**
+ * A handful of common greetings/chitchat words collide with real two-letter
+ * state abbreviations — "hi" is also Hawaii's postal code, "ok" is also
+ * Oklahoma's. Checked before state parsing so a visitor saying hello isn't
+ * told they're in an unlicensed state. Found via manual testing: typing
+ * "Hi" produced the ineligible-state rejection message instead of a
+ * reprompt, because "hi" matched Hawaii before anything else got a look.
+ */
+const GREETING_WORDS = new Set(["hi", "hello", "hey", "hiya", "howdy", "yo", "sup", "ok", "okay"]);
+
+export function isGreeting(text: string): boolean {
+  return GREETING_WORDS.has(text.trim().toLowerCase());
+}
+
 /** Parses free text like "Oregon", "oregon", or "OR" into an eligible state code. Returns null if it isn't one of our eight licensed states (which does not necessarily mean it's an invalid US state — see the ineligible-state flow). */
 export function parseEligibleState(text: string): EligibleState | null {
+  if (isGreeting(text)) return null;
   return LOOKUP.get(text.trim().toLowerCase()) ?? null;
 }
 
@@ -89,5 +104,6 @@ for (const [abbr, name] of Object.entries(ALL_US_STATES)) {
 
 /** Recognizes any real US state name/abbreviation (not just the eight we serve), so we can distinguish "we don't serve this state" from "that isn't a state." */
 export function isRecognizableUsState(text: string): boolean {
+  if (isGreeting(text)) return false;
   return ALL_US_STATES_LOOKUP.has(text.trim().toLowerCase());
 }

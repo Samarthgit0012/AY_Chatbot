@@ -13,7 +13,8 @@ export class AnthropicClient implements LlmClient {
 
   constructor(config: AnthropicClientConfig) {
     this.client = new Anthropic({ apiKey: config.apiKey });
-    this.model = config.model ?? "claude-sonnet-4-5";
+    // "||" not "??" — an empty string must also fall back to the default, not be passed to the SDK as-is.
+    this.model = config.model || "claude-sonnet-4-5";
   }
 
   async complete(request: CompletionRequest): Promise<string> {

@@ -14,7 +14,7 @@ import {
   type FlowDefinition,
 } from "@revas/flows";
 import { MAIN_MENU_ROUTES } from "./main-menu.js";
-import { isRecognizableUsState, parseEligibleState } from "./state-lookup.js";
+import { isGreeting, isRecognizableUsState, parseEligibleState } from "./state-lookup.js";
 import {
   type BotMessage,
   type ConversationState,
@@ -80,6 +80,10 @@ function startLeadCapture(state: ConversationState): EngineOutcome {
 
 function handleAwaitingState(state: ConversationState, input: UserInput): EngineOutcome {
   if (input.type !== "text") return unhandled();
+
+  if (isGreeting(input.value)) {
+    return handled(state, [{ text: "Hey there! What state are you in? (e.g. Oregon, OR)" }]);
+  }
 
   const eligible = parseEligibleState(input.value);
   if (eligible) {

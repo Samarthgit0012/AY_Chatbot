@@ -20,7 +20,8 @@ export class GeminiClient implements LlmClient {
 
   constructor(config: GeminiClientConfig) {
     this.client = new GoogleGenAI({ apiKey: config.apiKey });
-    this.model = config.model ?? "gemini-3.1-flash-lite";
+    // "||" not "??" — an empty string must also fall back to the default, not be passed to the SDK as-is.
+    this.model = config.model || "gemini-3.1-flash-lite";
   }
 
   async complete(request: CompletionRequest): Promise<string> {
