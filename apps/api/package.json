@@ -19,10 +19,12 @@
     "@revas/flows": "*",
     "fastify": "^5.1.0",
     "googleapis": "^173.0.0",
+    "nodemailer": "^9.0.3",
     "pino": "^9.5.0"
   },
   "devDependencies": {
     "@types/node": "^22.9.0",
+    "@types/nodemailer": "^6.4.16",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3",
     "vitest": "^3.2.4"
