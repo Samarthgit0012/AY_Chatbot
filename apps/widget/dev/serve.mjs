@@ -5,11 +5,11 @@
 // Node's http module has none of that risk.
 import { createServer } from "node:http";
 import { readFile } from "node:fs/promises";
-import { extname, join } from "node:path";
+import { extname, join, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const devDir = fileURLToPath(new URL(".", import.meta.url));
-const widgetDistDir = join(devDir, "..", "dist");
+const widgetDistDir = resolve(devDir, "..", "dist");
 const port = Number(process.env.PORT ?? 8091);
 
 const MIME = {
@@ -18,6 +18,15 @@ const MIME = {
   ".map": "application/json; charset=utf-8",
 };
 
+/** Resolves a /dist/-prefixed request path and rejects anything that would escape widgetDistDir (e.g. "/dist/../../../etc/passwd"). */
+function resolveDistPath(url) {
+  const requested = resolve(widgetDistDir, url.slice("/dist/".length));
+  if (requested !== widgetDistDir && !requested.startsWith(widgetDistDir + sep)) {
+    return null;
+  }
+  return requested;
+}
+
 createServer(async (req, res) => {
   try {
     const url = req.url ?? "/";
@@ -25,7 +34,12 @@ createServer(async (req, res) => {
     if (url === "/" || url === "/index.html") {
       filePath = join(devDir, "index.html");
     } else if (url.startsWith("/dist/")) {
-      filePath = join(widgetDistDir, url.replace("/dist/", ""));
+      filePath = resolveDistPath(url);
+      if (!filePath) {
+        res.writeHead(403);
+        res.end("Forbidden");
+        return;
+      }
     } else {
       res.writeHead(404);
       res.end("Not found");
@@ -34,11 +48,12 @@ createServer(async (req, res) => {
     const content = await readFile(filePath);
     res.writeHead(200, { "Content-Type": MIME[extname(filePath)] ?? "application/octet-stream" });
     res.end(content);
-  } catch (error) {
+  } catch {
     res.writeHead(500);
-    res.end(String(error));
+    res.end("Internal server error");
   }
-}).listen(port, () => {
+  // Loopback-only: this is a local dev tool, never meant to be reachable off-machine.
+}).listen(port, "127.0.0.1", () => {
   console.log(`Widget dev harness: http://localhost:${port}`);
   console.log(`(serving ${widgetDistDir} — run "npm run build --workspace=@revas/widget" first if it's missing)`);
 });
